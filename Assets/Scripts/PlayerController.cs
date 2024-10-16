@@ -6,11 +6,13 @@ public class PlayerController : MonoBehaviour
 {
     public float speed = 5.0f;
     public Rigidbody rb;
+    public Animator animator;
     public float jumpForce = 500f;
     public float rotationSpeed;
     Vector3 moveDirection;
     bool mustJump = false;
     bool isGrounded = true;
+
 
     public GameObject cameraObj;
     void Start()
@@ -20,6 +22,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+
+        animator.SetBool("isRunning", rb.velocity.magnitude > 0.01f);
+
 
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveZ = Input.GetAxisRaw("Vertical");
