@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     Vector3 moveDirection;
     bool mustJump = false;
     bool isGrounded = true;
+
+    public GameObject cameraObj;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -34,8 +36,13 @@ public class PlayerController : MonoBehaviour
             mustJump = true;
         }
 
-        transform.rotation = Quaternion.Euler(0, mouseMovX * Time.deltaTime * rotationSpeed, 0) * transform.rotation;
-        moveDirection = new Vector3(moveX, 0, moveZ).normalized * speed;
+        transform.rotation = Quaternion.Euler(0, mouseMovX * rotationSpeed, 0) * transform.rotation;
+        
+        cameraObj.transform.localRotation = Quaternion.Euler(-mouseMovY * rotationSpeed, 0, 0) * cameraObj.transform.localRotation;
+
+        //moveDirection = new Vector3(moveX, 0, moveZ).normalized * speed;
+        moveDirection = (transform.forward * moveZ + transform.right * moveX).normalized * speed; 
+
 
         
     }
@@ -47,7 +54,7 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(Vector3.up * jumpForce);
             mustJump = false;
         }
-        rb.velocity = transform.rotation * new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
+        rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
     }
 
     private void OnTriggerEnter(Collider other)
